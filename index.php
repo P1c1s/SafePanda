@@ -2,7 +2,8 @@
    /* CONFIGURATION */
 
    //Generation fo crypty file
-   include 'components/criptyMaker.php';
+   if(!file_exists("components/cripty.php"))
+      include 'components/criptyMaker.php';
 
    $fileName = "account/singleUser";
 
