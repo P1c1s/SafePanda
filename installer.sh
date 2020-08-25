@@ -33,7 +33,7 @@ if [ "$decision" = "y" ]; then
    apt-get install apache2 -y && apt-get install php7.3 -y && apt-get install php7.3-zip && apt-get install php7.3-mysql -y -y && apt-get install libapache2-mod-php7.3 -y
 
    #Move SafePanda to web-root, Change PErmission, Remove installer and Show ip
-   mv ../SafePanda-master /var/www/html/SafePanda
+   mv ../SafePanda* /var/www/html/SafePanda
    chown www-data /var/www/html/SafePanda/tmp -R && chgrp www-data /var/www/html/SafePanda/tmp -R
    chown www-data /var/www/html/SafePanda/account -R && chgrp www-data /var/www/html/SafePanda/account -R
    chown www-data /var/www/html/SafePanda/components -R && chgrp www-data /var/www/html/SafePanda/components -R
