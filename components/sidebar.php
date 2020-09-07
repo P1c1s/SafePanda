@@ -17,6 +17,24 @@
    echo '<i class="fas fa-fw fa-tachometer-alt"></i>';
    echo '<span>Dashboard</span></a>';
    echo '</li>';
+   //<!-- Nav Item - Favorites -->
+   echo '<li class="nav-item active">';
+   echo '<a class="nav-link" href="favorites.php">';
+   echo '<i class="fas fa-fw fa-star"></i>';
+   echo '<span>Preferiti</span></a>';
+   echo '</li>';
+   //<!-- Nav Item - Categoories -->
+   echo '<li class="nav-item active">';
+   echo '<a class="nav-link" href="categories.php">';
+   echo '<i class="fas fa-fw fa-tag"></i>';
+   echo '<span>Categorie</span></a>';
+   echo '</li>';
+   //<!-- Nav Item - Trash -->
+   echo '<li class="nav-item active">';
+   echo '<a class="nav-link" href="trash.php">';
+   echo '<i class="fas fa-fw fa-trash-alt"></i>';
+   echo '<span>Cestino</span></a>';
+   echo '</li>';
    //<!-- Divider -->
    echo '<hr class="sidebar-divider">';
    echo '<!-- Heading -->';
@@ -62,7 +80,8 @@
    echo '<a class="nav-link" href="charts.php">';
    echo '<i class="fas fa-fw fa-chart-area"></i>';
    echo '<span>Grafici</span></a>';
-   echo '</li>';
+   echo '</li>'
+;
    //<!-- Divider -->
    echo '<hr class="sidebar-divider d-none d-md-block">';
    //<!-- Sidebar Toggler (Sidebar) -->

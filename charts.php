@@ -24,10 +24,34 @@
 
 ?>
 
+
 <?php
 
    include 'account/variables.php';
    include 'components/cripty.php';
+
+
+      try{
+          // connect to mysql
+          $con = new PDO($dsn,$dbUser,$dbPassword);
+          $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      }catch (Exception $ex) {
+         echo 'Not Connected '.$ex->getMessage();
+         }
+
+      $queryx = $con->prepare('SELECT Title, DATE_FORMAT(CreationDate, "%d-%m-%Y") as CreationDate FROM accounts;');
+      $queryx->execute();
+      $resultx = $queryx->fetchAll();
+      mysqli_close($connection);
+
+
+?>
+
+
+<?php
+
+//   include 'account/variables.php';
+//   include 'components/cripty.php';
 
    if(isset($_POST['passwdSubmit'])){
 
@@ -97,6 +121,18 @@
 
  <title>Grafici</title>
 
+<style>
+
+#tooltip {
+  background: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+</style>
+
+
 </head>
 
 <body id="page-top">
@@ -120,10 +156,8 @@
   include 'components/topbar.php';
 ?>
 
-
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Grafici</h1>
@@ -144,7 +178,7 @@
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">Dropdown Header:</div>
                       <a class="dropdown-item" href="javascript:hideCharts('a');">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Mostra time line come su github</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -153,7 +187,109 @@
                 <!-- Card Body -->
                 <div class="card-body" id="a" style="transition: 2s;">
                   <div class="chart-area">
-                    <canvas id="passwordLength"></canvas>
+
+<div id="tooltip" display="none" style="position: absolute; display: none;"></div>
+
+
+
+<?php
+
+//echo '<svg height="100%" width="100%" overflow="visible">';
+echo '<svg height="100%" width="100%" style="overflow-x: auto; overflow-y: auto ;preserveAspectRatio="xMinYMin slice" overflow="visible">';
+$dim=4;
+$a=(10-(10*0.8));
+$e="a";
+
+$k=0;
+$j=1;
+
+   foreach($resultx as $rowx){
+   echo '<g transform="translate(50, '.(40*$k/$a).')">';
+   $c=1;
+   $k++;
+   for($i=0;$i<36;$i++){
+
+      if($c<10)
+         $x="0".$c;
+      else
+         $x=$c;
+
+      $pattern = "/.*(-".$x."-).*/";
+      $app=$rowx['CreationDate'];
+
+      if(preg_match($pattern, /*$rowx['CreationDate']*/ $app)){
+         $app2=substr($rowx['CreationDate'],0,2);
+
+/*
+echo '<h1>'.$rowx['CreationDate'].'</h1>';
+echo '<h1>'.$app2.'</h1>';
+*/
+
+
+
+         if($app2>=1 && $app2<=3){
+         $s = '<rect class="day" width="'.(30/$a).'" height="'.(30/$a).'" x="'.(40*$i/$a+90).'" y="'.($dim/2+12).'" fill="#9be9a8" data-count="0" data-date="2019-08-25"  onmousemove="showTooltip(evt,';
+         $s .= "'$app')";
+         $s .= '" onmouseout="hideTooltip();"></rect>';
+         echo $s;
+        }
+
+else{
+
+         $s = '<rect class="day" width="'.(30/$a).'" height="'.(30/$a).'" x="'.(40*$i/$a+90).'" y="'.($dim/2+12).'" fill="#ebedf0" data-count="0" data-date="2019-08-25"  onmousemove="showTooltip(evt,';
+         $s .= "'$app')";
+         $s .= '" onmouseout="hideTooltip();"></rect>';
+         echo $s;
+
+}
+
+       }
+       else
+         echo '<rect class="day" width="'.(30/$a).'" height="'.(30/$a).'" x="'.(40*$i/$a+90).'" y="'.($dim/2+12).'" fill="#ebedf0" data-count="0" data-date="2019-08-25"></rect>';
+
+
+   if($j==3){
+     $c++;
+     $j=1;
+     }
+     else $j++;
+
+//$c++;
+
+   }
+
+   echo '</g>';
+
+}
+
+$d=60;
+$s=75;
+$size=14;
+echo '<text x="'.($d+$s).'" y="12" class="month" font-size="'.$size.'">Gen</text>';
+echo '<text x="'.(2*$d+$s).'" y="12" class="month" font-size="'.$size.'">Feb</text>';
+echo '<text x="'.(3*$d+$s).'" y="12" class="month" font-size="'.$size.'">Mar</text>';
+echo '<text x="'.(4*$d+$s).'" y="12" class="month" font-size="'.$size.'">Apr</text>';
+echo '<text x="'.(5*$d+$s).'" y="12" class="month" font-size="'.$size.'">Mag</text>';
+echo '<text x="'.(6*$d+$s).'" y="12" class="month" font-size="'.$size.'">Giu</text>';
+echo '<text x="'.(7*$d+$s).'" y="12" class="month" font-size="'.$size.'">Lug</text>';
+echo '<text x="'.(8*$d+$s).'" y="12" class="month" font-size="'.$size.'">Ago</text>';
+echo '<text x="'.(9*$d+$s).'" y="12" class="month" font-size="'.$size.'">Set</text>';
+echo '<text x="'.(10*$d+$s).'" y="12" class="month" font-size="'.$size.'">Ott</text>';
+echo '<text x="'.(11*$d+$s).'" y="12" class="month" font-size="'.$size.'">Nov</text>';
+echo '<text x="'.(12*$d+$s).'" y="12" class="month"font-size="'.$size.'">Dic</text>';
+
+$i=0;
+   foreach($resultx as $rowx){
+$i++;
+echo '<text text-anchor="start" class="wday" dx="10" dy="'.(20*$i+10).'">'.$rowx['Title'].'</text>';
+
+}
+echo '</svg>';
+
+
+?>
+
+
                   </div>
                 </div>
               </div>
@@ -172,7 +308,7 @@
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">Dropdown Header:</div>
                       <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Mostra time line come su github</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -210,6 +346,8 @@
 
 
    foreach($result1 as $row1){
+
+      $passwordDecrypted = decry($row1['PasswdLength'], "a");
 
       echo '<h4 class="small font-weight-bold">'.$row1['PasswdLength'].' caratteri<span class="float-right">'.round(($row1['PasswdNumber']/$pNumber['Number']*100),2).'%</span></h4>';
       echo '<div class="progress mb-4">';
@@ -489,6 +627,138 @@
    include 'components/script.php';
 ?>
 
+
+
+<script>
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+// Pie Chart Example
+var ctx = document.getElementById("boardd");
+var myChart = new Chart(ctx, {
+    type: 'scatter',
+
+    data: {
+        datasets: [{
+            data: [20, 50, 100, 75, 25, 0],
+            label: 'Left dataset',
+
+            // This binds the dataset to the left y axis
+            yAxisID: 'left-y-axis'
+        }, {
+            data: [0.1, 0.5, 1.0, 2.0, 1.5, 0],
+            label: 'Right dataset',
+
+            // This binds the dataset to the right y axis
+            yAxisID: 'right-y-axis'
+        }],
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                id: 'left-y-axis',
+                type: 'linear',
+                position: 'left'
+            }, {
+                id: 'right-y-axis',
+                type: 'linear',
+                position: 'right'
+            }]
+        }
+
+      }
+});
+
+
+
+/* options: {
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+    },
+*/
+
+
+
+</script>
+
+
+
+<script>
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+// Pie Chart Example
+var ctx = document.getElementById("board");
+var myPieChart = new Chart(ctx, {
+  type: 'scatter',
+
+
+    data: {
+        datasets: [{
+            label: 'Scatter Dataset',
+            data: [{
+                x: 1,
+                y: 1
+            }, {
+                x: 2,
+                y: 3
+            }, {
+                x: 4,
+                y: 5
+            }]
+        }
+
+
+],
+
+
+
+    },
+
+
+/*
+      backgroundColor: ['#9a0dc6', '#227a8a', '#f66500','#7682dc', '#f8a1f3', '#1cf88a','#e7423b', '#f2c23e', '#1cf88a'],
+      hoverBackgroundColor: ['#e02d1b', '#f4b619', '#17a673'],
+      hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+  },
+
+
+*/
+  options: {
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(25,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+    },
+    legend: {
+      display: true,
+position: "right",
+    },
+    cutoutPercentage: 80,
+  },
+});
+
+</script>
+
+
 <script>
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -563,7 +833,7 @@ var ctx = document.getElementById("passwordComplexity");
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["Deboli", "Standard", "Forti"],
+    labels: ["Deboli", "Buone", "Forti"],
     datasets: [{
 
 <?php
@@ -662,6 +932,22 @@ position: "right",
 
 </script>
 
+<script>
+
+function showTooltip(evt, text) {
+  let tooltip = document.getElementById("tooltip");
+  tooltip.innerHTML = text;
+  tooltip.style.display = "block";
+  tooltip.style.left = evt.pageX + 10 + 'px';
+  tooltip.style.top = evt.pageY + 10 + 'px';
+}
+
+function hideTooltip() {
+  var tooltip = document.getElementById("tooltip");
+  tooltip.style.display = "none";
+}
+
+</script>
 
 </body>
 

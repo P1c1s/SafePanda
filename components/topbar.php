@@ -77,7 +77,7 @@
 
 
    //<!-- Counter - Alerts -->
-   if(preg_match("/version 1.0/", $version))
+   if(!preg_match("/version 1.0/", $version))
       echo '<span class="badge badge-danger badge-counter">1+</span>';
 
    echo '</a>';
@@ -87,7 +87,7 @@
    echo '<h6 class="dropdown-header">Centro notifiche</h6>';
    echo '<a class="dropdown-item d-flex align-items-center" href="#">';
    echo '<div class="mr-3">';
-   if(preg_match("/version 1.0/", $version)){
+   if(!preg_match("/version 1.0/", $version)){
       echo '<div class="icon-circle bg-primary">';
       echo '<i class="fas fa-exclamation text-white"></i>';
       echo '</div>';
@@ -95,7 +95,7 @@
    echo '</div>';
    echo '<div>';
 
-   if(preg_match("/version 1.0/", $version)){
+   if(!preg_match("/version 1.0/", $version)){
       //echo '<div class="small text-gray-500">December 12, 2019</div>';
       echo '<span class="font-weight-bold">È disponibile una nuova versione</span>';
       echo '</div>';
@@ -120,6 +120,9 @@
    echo '<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">';
    echo '<a class="dropdown-item" href="profile.php">';
    echo '<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>Profilo';
+   echo '</a>';
+   echo '<a class="dropdown-item" href="guide.php">';
+   echo '<i class="fas fa-book fa-sm fa-fw mr-2 text-gray-400"></i>Guida';
    echo '</a>';
    echo '<div class="dropdown-divider"></div>';
    echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">';

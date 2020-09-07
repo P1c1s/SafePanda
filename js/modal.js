@@ -1,5 +1,8 @@
 function modify(num){
 
+   /* FAVORITES */
+   document.getElementById("favorites"+num).style.display="";
+
    /* DATES */
    document.getElementById("date"+num).style.display="";
 
@@ -15,6 +18,7 @@ function modify(num){
    document.getElementById("password"+num).style.display="";
    document.getElementById("password*"+num).style.display="none";
    document.getElementById("eye"+num).style.display="none";
+   document.getElementById("passGen"+num).style.display="";
 
    /* OTHER FIELDS */
    document.getElementById("pinRow"+num).style.display="";
@@ -381,6 +385,9 @@ function modify(num){
 
 function cancel(num){
 
+   /* FAVORITES */
+   document.getElementById("favorites"+num).style.display="none";
+
    /* DATES */
    document.getElementById("date"+num).style.display="none";
 
@@ -516,6 +523,7 @@ function cancel(num){
    document.getElementById("password"+num).style.display="none";
    document.getElementById("password*"+num).style.display="";
    document.getElementById("eye"+num).style.display="";
+   document.getElementById("passGen"+num).style.display="none";
 }
 
 function closeModal(num){
@@ -577,14 +585,61 @@ var counter=0;
 function showPassword(num){
 
    //Alternator about show and hidden the password
-   if(counter==0){
+   if(document.getElementById("eye"+num).className =="fas fa-eye fa-2x text-gray-300"){
+      document.getElementById("eye"+num).className="fas fa-eye-slash fa-2x text-gray-300";
       document.getElementById("password"+num).style.display="";
       document.getElementById("password*"+num).style.display="none";
-      counter=1;
    }
-   else{
-      document.getElementById("password"+num).style.display="none";
-      document.getElementById("password*"+num).style.display="";
-      counter=0;
+   else
+      if(document.getElementById("eye"+num).className =="fas fa-eye-slash fa-2x text-gray-300"){
+         document.getElementById("eye"+num).className="fas fa-eye fa-2x text-gray-300";
+         document.getElementById("password"+num).style.display="none";
+         document.getElementById("password*"+num).style.display="";
+      }
+
+}
+
+
+function favorites(num){
+
+   //Alternator about show and hidden the password
+   if(document.getElementById("favorites"+num).className =="fas fa-star text-secondary"){
+      document.getElementById("favorites"+num).className="fas fa-star text-warning";
+      document.getElementById("favoriteStar"+num).value="1";
    }
+   else
+      if(document.getElementById("favorites"+num).className =="fas fa-star text-warning"){
+         document.getElementById("favorites"+num).className="fas fa-star text-secondary";
+         document.getElementById("favoriteStar"+num).value="0";
+      }
+
+
+}
+
+function passwordGenerator(num){
+
+   var chars=['0','1','2','3','4','5','6','7','8','9',
+              'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+              'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+   var breaks  =['-','_','+','='];
+
+   var app="";
+   var j=0;
+
+   for(i=0; i<15; i++){
+
+      if(j!=3){
+         app += chars[Math.floor(Math.random() * chars.length)];
+         j++;
+      }
+      else{
+         app += breaks[Math.floor(Math.random() * breaks.length)];
+         j=0;
+      }
+
+   }
+
+   document.getElementById("password"+num).value=app;
+
 }

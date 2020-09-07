@@ -9,13 +9,13 @@ Safe Panda is a personal password manager based on startbootstrap-sb-admin-2.
 ## Installation
 
 
-Download the repository --> clone https://github.com/P1c1s/drive.git
+Download the repository `git clone https://github.com/P1c1s/SafePanda.git`.
 After the download enter in SafePanda directory
-` $ cd SafePanda`
+` $ cd SafePanda`.
 Change permission of file
-` $ chmod +x installer.sh`
+` $ chmod +x installer.sh`.
 Run the installer as Root or Sudo User
-` $ sudo ./installer.sh`
+` $ sudo ./installer.sh`.
 Open browser and go to ip of machine e.g. 192.168.1.x/SafePanda
 
 ## Feature

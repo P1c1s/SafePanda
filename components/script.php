@@ -23,6 +23,8 @@
   //<!--   -->
   echo '<script src="js/search.js"></script>';
 
+  echo '<script src="js/cat.js"></script>';
+
   echo '<script src="js/chart.js"></script>';
 
 ?>

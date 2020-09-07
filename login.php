@@ -24,6 +24,8 @@
       if($_POST['username'] == $result['Username'] && sha1($_POST['password']) == $result['Passwd']){
          session_start();
          $_SESSION['login'] = 'ok';
+         $_SESSION['timeout'] = time();
+         $_SESSION['countDown'] = $result['Timeout'];
 
          if($_POST['checkbox'] == "yes")
             setcookie("login", "ok", strtotime("+3 week"), "", null, true, true);

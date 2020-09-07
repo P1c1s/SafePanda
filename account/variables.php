@@ -1,5 +1,6 @@
 <?php
 
+   $db = 'safepanda';
    //Host and db
    $dsn = 'mysql:hosy=localhost;dbname=safepanda';
    //Username for access to database safepanda
