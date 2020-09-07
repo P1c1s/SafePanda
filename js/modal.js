@@ -1,5 +1,8 @@
 function modify(num){
 
+   /* DATES */
+   document.getElementById("date"+num).style.display="";
+
    /* BUTTONS */
    document.getElementById("modify"+num).style.display="none";
    document.getElementById("cancel"+num).style.display="";
@@ -377,6 +380,9 @@ function modify(num){
 }
 
 function cancel(num){
+
+   /* DATES */
+   document.getElementById("date"+num).style.display="none";
 
    /* BUTTONS */
    document.getElementById("modify"+num).style.display="";

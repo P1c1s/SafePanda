@@ -68,6 +68,7 @@
       fwrite($fp, '      $password = str_split($password, 1);'."\n"."\n");
       fwrite($fp, '      global $values, $chars, $dim;'."\n"."\n");
       fwrite($fp, '      $lun = sizeof($password);'."\n"."\n");
+      fwrite($fp, '      $str = $chars[$lun];'."\n"."\n");
       fwrite($fp, '      $j=0;'."\n"."\n");
       fwrite($fp, '      for($i=0; $i<$lun; $i++){'."\n");
       fwrite($fp, '         if($c==3){'."\n");
@@ -82,6 +83,8 @@
       fwrite($fp, '      $newPassword[$i] = $chars[$position];'."\n"."\n");
       fwrite($fp, '      $str .= $newPassword[$i];'."\n"."\n");
       fwrite($fp, '      }'."\n"."\n");
+      fwrite($fp, '      for($i=$lun-1; $i<48; $i++)'."\n");
+      fwrite($fp, '         $str .= $chars[rand(0, $dim-1)];'."\n"."\n");
       fwrite($fp, '      return $str;'."\n"."\n");
       fwrite($fp, '   }'."\n"."\n");
 
@@ -90,9 +93,9 @@
       fwrite($fp, '   function decry($password, $key){'."\n"."\n");
       fwrite($fp, '      $password = str_split($password, 1);'."\n"."\n");
       fwrite($fp, '      global $values, $chars, $dim;'."\n"."\n");
-      fwrite($fp, '      $lun = sizeof($password);'."\n"."\n");
+      fwrite($fp, '      $lun = $values[$password[0]];'."\n"."\n");
       fwrite($fp, '      $j=0;'."\n"."\n");
-      fwrite($fp, '      for($i=0; $i<$lun; $i++){'."\n");
+      fwrite($fp, '      for($i=1; $i<=$lun; $i++){'."\n");
       fwrite($fp, '         if($c==3){'."\n");
       fwrite($fp, '            $j++;'."\n");
       fwrite($fp, '            $c=1;'."\n");

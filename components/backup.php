@@ -132,7 +132,7 @@
 
       $fileName = '../tmp/backup'.$date.'.sql';
 
-      exec('mysqldump --user=vault --password=qss-s3E-IH9_Khz vault > '.$fileName);
+      exec('mysqldump --user='.$dbUser.' --password=qss-s3E-IH9_Khz '.$db.' > '.$fileName);
 
       header('Content-Description: File Transfer');
       header('Content-Disposition: attachment; filename='.basename($fileName));

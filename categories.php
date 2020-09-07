@@ -191,6 +191,40 @@
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a>
           </div>
 
+
+          <!-- CATEGORIES -->
+          <div class="col-xl-3 col-md-6 mb-4">
+
+            <a href="javascript:f(25);" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Tutte</a>
+
+<?php
+
+   try{
+       // connect to mysql
+       $con = new PDO($dsn,$dbUser,$dbPassword);
+       $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   }catch (Exception $ex) {
+      echo 'Not Connected '.$ex->getMessage();
+      }
+
+   // mysql select query
+   $query = $con->prepare('SELECT Tag FROM accounts GROUP BY Tag;');
+   $query->execute();
+   $result = $query->fetchAll();
+   mysqli_close($connection);
+
+   foreach($result as $row){
+
+      echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i>'.$row['Tag'].'</a>';
+
+
+   }
+
+
+?>
+
+          </div>
+
           <!-- Content Row -->
           <div class="row">
 

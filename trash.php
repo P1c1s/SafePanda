@@ -11,31 +11,8 @@
 
 <?php
 
-   /* ADD NEW ACCOUNT  */
-   if(isset($_POST['add'])){
-
-      //Date
-      setlocale(LC_TIME, 'ita', 'it_IT.utf8');
-      $time=time();
-      $date = strftime("%Y%m%d%H%M%S",$time);
-
-      //POST Varibales
-      $id_account = $_POST['idAccount'];
-      $title = $_POST['title'];
-      $username = $_POST['username'];
-      $password = $_POST['password'];
-      $pin = $_POST['pin'];
-      $url = $_POST['url'];
-      $tag = $_POST['tag'];
-      $icon = $_POST['icon'];
-      $color = $_POST['color'];
-      $notes = $_POST['notes'];
-
-      //Encrypted Data
-      $encryptionKey = keyGenerator();
-      $usernameEncrypted = cry($username, $encryptionKey);
-      $passwordEncrypted = cry($password, $encryptionKey);
-      $pinEncrypted = cry($pin, $encryptionKey);
+   /* EMPTY TRASH  */
+   if(isset($_POST['empty'])){
 
       try{
           // connect to mysql
@@ -46,7 +23,7 @@
          }
 
       // mysql query
-      $str="INSERT INTO accounts(KeyC, Title, Username, Passwd, Pin, Url, Tag, Icon, Color, Notes, CreationDate, Favorites, Deleted) VALUES('$encryptionKey', '$title', '$usernameEncrypted', '$passwordEncrypted', '$pinEncrypted', '$url' ,'$tag' ,'$icon', '$color', '$notes', '$date', 0, 0);";
+      $str="DELETE FROM accounts WHERE Deleted = 1;";
 
       $query = $con->prepare($str);
       $query->execute();
@@ -54,28 +31,8 @@
 
    }
 
-
-   /* UPDATE ACCOUNT  */
-
-   if(isset($_POST['update'])){
-
-      //Date
-      setlocale(LC_TIME, 'ita', 'it_IT.utf8');
-      $time=time();
-      $date = strftime("%Y%m%d%H%M%S",$time);
-
-      //POST Varibales
-      $id_account = $_POST['idAccount'];
-      $title = $_POST['title'];
-      $username = $_POST['username'];
-      $password = $_POST['password'];
-      $pin = $_POST['pin'];
-      $url = $_POST['url'];
-      $tag = $_POST['tag'];
-      $icon = $_POST['icon'];
-      $color = $_POST['color'];
-      $notes = $_POST['notes'];
-      $favorite = $_POST['favoriteStar'];
+   /* RECOVER ALL */
+   if(isset($_POST['recoverAll'])){
 
       try{
           // connect to mysql
@@ -85,19 +42,20 @@
          echo 'Not Connected '.$ex->getMessage();
          }
 
-      // mysqlt query
-      $str="SELECT KeyC FROM accounts WHERE id_account = '$id_account';";
+      // mysql query
+      $str="UPDATE accounts SET Deleted = 0 WHERE Deleted = 1;";
 
       $query = $con->prepare($str);
       $query->execute();
-      $result = $query->fetch();
       mysqli_close($connection);
 
-      $usernameEncrypted = cry($username, $result['KeyC']);
-      $passwordEncrypted = cry($password, $result['KeyC']);
+   }
 
-      if($pin!="")
-         $pinEncrypted = cry($pin, $result['KeyC']);
+   /* RECOVER ACCOUNT  */
+
+   if(isset($_POST['recover'])){
+
+      $id_account = $_POST['idAccount'];
 
       try{
           // connect to mysql
@@ -107,8 +65,8 @@
          echo 'Not Connected '.$ex->getMessage();
          }
 
-      // mysqlt query
-      $str="UPDATE accounts SET Title = '$title', Username = '$usernameEncrypted', Passwd = '$passwordEncrypted', Pin = '$pinEncrypted', Url = '$url', Tag = '$tag', Icon = '$icon', Color = '$color', Notes = '$notes', UpdateDate = '$date', Favorites = '$favorite' WHERE id_account = '$id_account';";
+      // mysql query
+      $str="UPDATE accounts SET Deleted = '0' WHERE id_account = '$id_account';";
 
       $query = $con->prepare($str);
       $query->execute();
@@ -132,7 +90,7 @@
          }
 
       // mysql query
-      $str="UPDATE accounts SET Deleted = 1, Favorites = 0  WHERE id_account ='$id_account';";
+      $str="DELETE FROM accounts WHERE id_account ='$id_account';";
 
       $query = $con->prepare($str);
       $query->execute();
@@ -152,7 +110,7 @@
    include 'components/head.php';
 ?>
 
- <title>Dashboard</title>
+ <title>Cestino</title>
 
 </head>
 
@@ -187,8 +145,8 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a>
+            <h1 class="h3 mb-0 text-gray-800">Cestino</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#empty"><i class="fas fa-dumpster fa-sm text-white-50"></i> Svuota</a>
           </div>
 
           <!-- Content Row -->
@@ -206,8 +164,8 @@
       echo 'Not Connected '.$ex->getMessage();
       }
 
-   // mysql select query
-   $query = $con->prepare('SELECT id_account, Title, Username, Passwd, Pin, Url, Icon, Notes, Tag, Color, KeyC, DATE_FORMAT(CreationDate,"%d/%m/%Y alle %H:%i") as CreationDate, DATE_FORMAT(UpdateDate,"%d/%m/%Y alle %H:%i") as UpdateDate, Favorites FROM accounts WHERE Deleted != 1 ORDER BY Title;');
+   // mysql query
+   $query = $con->prepare('SELECT id_account, Title, Username, Passwd, Pin, Url, Icon, Notes, Tag, Color, KeyC, DATE_FORMAT(CreationDate,"%d/%m/%Y alle %H:%i") as CreationDate, DATE_FORMAT(UpdateDate,"%d/%m/%Y alle %H:%i") as UpdateDate FROM accounts WHERE Deleted = 1 ORDER BY Title;');
    $query->execute();
    $result = $query->fetchAll();
    mysqli_close($connection);
@@ -293,10 +251,6 @@
       echo '<form action="" method="POST">';
       echo '<div class="modal-content">';
       echo '<div class="modal-header">';
-      if($row['Favorites']==1)
-         echo '<a href="javascript:favorites('.$row['id_account'].')" style="display:none;" id="favorites'.$row['id_account'].'" class="fas fa-star text-warning"></a>';
-      else
-         echo '<a href="javascript:favorites('.$row['id_account'].')" style="display:none;" id="favorites'.$row['id_account'].'" class="fas fa-star text-secondary"></a>';
       echo '<h2 class="form-controld dform-control-user text-'.$row['Color'].' font-weight-bold" id="title'.$row['id_account'].'">'.$row['Title'].'</h2>';
       echo '<button class="close" type="button"data-dismiss="modal" aria-label="Close" onclick="closeModal('.$row['id_account'].')">';
       echo '<span aria-hidden="true">×</span>';
@@ -313,12 +267,9 @@
       echo '<h3 class="form-controld dform-control-user" id="password*'.$row['id_account'].'">************</h3>';
       echo '<h3 class="form-controld dform-control-user" style="display:none;" id="password'.$row['id_account'].'">'.decry($row['Passwd'], $row['KeyC']).'</h3>';
       echo '</div>';
-      echo '<div class="col-auto">';
-      echo '<a href="javascript:passwordGenerator('.$row['id_account'].')">';
-      echo '<i id="passGen'.$row['id_account'].'" class="fas fa-pen fa-2x text-gray-300" style="display:none;"></i>';
-      echo '</a>';
+      echo '<div class="col-auto" id="eye'.$row['id_account'].'">';
       echo '<a href="javascript:showPassword('.$row['id_account'].')">';
-      echo '<i id="eye'.$row['id_account'].'" class="fas fa-eye fa-2x text-gray-300"></i>';
+      echo '<i class="fas fa-eye fa-2x text-gray-300"></i>';
       echo '</a>';
       echo '</div>';
       echo '</div>';
@@ -354,14 +305,11 @@
       echo '</div>';
       echo '</div>';
       echo '<div class="modal-footer" id="footerModal'.$row['id_account'].'">';
-      echo '<input class="btn btn-danger" name="delete" type="submit" value="Elimina" style="display:none;" id="delete'.$row['id_account'].'">';
+      echo '<input class="btn btn-danger" name="delete" type="submit" value="Elimina Definitivamente">';
       echo '<button class="btn btn-primary" type="button" id="show'.$row['id_account'].'" onclick="show('.$row['id_account'].')">Mostra</button>';
       echo '<button class="btn btn-primary" type="button" style="display:none;" id="hide'.$row['id_account'].'" onclick="hide('.$row['id_account'].')">Nascondi</button>';
-      echo '<button class="btn btn-primary" type="button" id="modify'.$row['id_account'].'" onclick="modify('.$row['id_account'].')">Modifica</button>';
-      echo '<button class="btn btn-primary" type="button" style="display:none;" id="cancel'.$row['id_account'].'" onclick="cancel('.$row['id_account'].')">Annulla</button>';
-      echo '<input class="btn btn-primary" name="update" type="submit" value="Aggiorna" style="display:none;" id="update'.$row['id_account'].'">';
+      echo '<input class="btn btn-primary" name="recover" type="submit" value="Recupera">';
       echo '<input  name="idAccount" type="hidden" value="'.$row['id_account'].'">';
-      echo '<input  id="favoriteStar'.$row['id_account'].'" name="favoriteStar" type="hidden" value="0">';
       echo '</form>';
       echo '</div>';
       echo '</div>';
@@ -373,103 +321,26 @@
 ?>
 
 
-      <!-- New Account Modal-->
-      <div class="modal fade" id="new" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-         <form method="POST" action="">
-          <div class="modal-content">
-            <div class="modal-header">
-               <input class="form-control form-control-user" placeholder="Titolo" name="title" required="required">
-               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-               </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-               <label class="text-primary">Username</label>
-               <input type="text" class="form-control form-control-user" name="username" required="required">
-              </div>
-              <label class="text-primary">Password</label>
-              <div class="row">
-                <div class="col-md">
-                 <input id="password0" name="password" class="form-control form-control-user"></div>
-                  <div class="col-auto">
-                    <a href="javascript:passwordGenerator(0)">
-                     <i id="passGen0" class="fas fa-pen fa-2x text-gray-300"></i>
-                  </a>
-                </div>
-              </div>
-
-
-
-
-
-
-
-           <div class="form-group">
-            <label class="text-primary">Pin</label>
-            <input type="text" class="form-control form-control-user" name="pin">
-           </div>
-           <div class="form-group">
-            <label class="text-primary">URL</label>
-            <input type="text" class="form-control form-control-user" name="url">
-           </div>
-           <div class="form-group">
-            <label class="text-primary">Etichetta</label>
-            <input type="text" class="form-control form-control-user" name="tag" value="Altro">
-           </div>
-           <div class="form-group">
-            <label class="text-primary">Icon</label>
-            <input type="text" class="form-control form-control-user" name="icon">
-           </div>
-           <div class="form-group">
-            <label class="text-primary">Color</label>
-              <div class="form-group row">
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                 <input type="radio" name="color" value="orange">arancione
-                </div>
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                 <input type="radio" name="color" value="primary">blu
-                </div>
-               <div class="col-sm-3 mb-3 mb-sm-0">
-                <input type="radio" name="color" value="info">ciano
-               </div>
-               <div class="col-sm-3 mb-3 mb-sm-0">
-                <input type="radio" name="color" value="warning">giallo
-               </div>
-               <div class="col-sm-3 mb-3 mb-sm-0">
-                <input type="radio" name="color" value="secondary" checked="checked">grigio
-               </div>
-               <div class="col-sm-3 mb-3 mb-sm-0">
-                <input type="radio" name="color" value="dark">nero
-               </div>
-               <div class="col-sm-3 mb-3 mb-sm-0">
-                <input type="radio" name="color" value="pink">rosa
-               </div>
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                 <input type="radio" name="color" value="danger">rosso
-                </div>
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                 <input type="radio" name="color" value="success">verde
-               </div>
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                 <input type="radio" name="color" value="purple">viola
-               </div>
-              </div>
-           </div>
-           <div class="form-group">
-            <label class="text-primary">Note</label>
-            <textarea type="text" class="form-control form-control-user" name="notes"></textarea>
-           </div>
-          </div>
-       </form>
-       <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Annulla</button>
-        <input type="submit" name="add" class="btn btn-primary" value="Crea">
-       </div>
-      </div>
+  <!-- Empty -->
+  <div class="modal fade" id="empty" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><b>Attento</b></h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Puoi svuotare il cestino o recuperare tutti gli account.</div>
+        <div class="modal-footer">
+         <form action="" method="POST">
+          <input type="submit" class="btn btn-danger" href="login.php" value="Svuota" name="empty">
+          <input type="submit" class="btn btn-primary" href="login.php" value="Recupera" name="recoverAll">
+         </form>
+        </div>
       </div>
     </div>
+  </div>
 
   <!-- DB-->
   <div class="modal fade" id="importDatabase" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

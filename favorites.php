@@ -152,7 +152,7 @@
    include 'components/head.php';
 ?>
 
- <title>Dashboard</title>
+ <title>Preferiti</title>
 
 </head>
 
@@ -187,7 +187,7 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 class="h3 mb-0 text-gray-800">Preferiti</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a>
           </div>
 
@@ -207,7 +207,7 @@
       }
 
    // mysql select query
-   $query = $con->prepare('SELECT id_account, Title, Username, Passwd, Pin, Url, Icon, Notes, Tag, Color, KeyC, DATE_FORMAT(CreationDate,"%d/%m/%Y alle %H:%i") as CreationDate, DATE_FORMAT(UpdateDate,"%d/%m/%Y alle %H:%i") as UpdateDate, Favorites FROM accounts WHERE Deleted != 1 ORDER BY Title;');
+   $query = $con->prepare('SELECT id_account, Title, Username, Passwd, Pin, Url, Icon, Notes, Tag, Color, KeyC, DATE_FORMAT(CreationDate,"%d/%m/%Y alle %H:%i") as CreationDate, DATE_FORMAT(UpdateDate,"%d/%m/%Y alle %H:%i") as UpdateDate, Favorites FROM accounts WHERE Favorites = 1 ORDER BY Title;');
    $query->execute();
    $result = $query->fetchAll();
    mysqli_close($connection);

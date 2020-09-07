@@ -20,17 +20,31 @@ read -p "Do you want exec me? YES [y] NO [n]: " decision
 
 if [ "$decision" = "y" ]; then
 
-   #Updating
-   apt-get update &&  apt-get upgrade -y
+   #Check the Package Manager
 
-   #Installation of git
-   apt-get install git -y
+   DIR="/etc/apt"
+   if [ -d "$DIR" ]; then
 
-   #Installation of zip
-   apt-get install zip -y
+      #Updating
+      apt-get update &&  apt-get upgrade -y
 
-   #Installation of Apache2
-   apt-get install apache2 -y && apt-get install php7.3 -y && apt-get install php7.3-zip && apt-get install php7.3-mysql -y -y && apt-get install libapache2-mod-php7.3 -y
+      #Installation of git
+      apt-get install git -y
+
+      #Installation of zip
+      apt-get install zip -y
+
+      #Installation of Apache2
+      apt-get install apache2 -y && apt-get install php7.3 -y && apt-get install php7.3-zip -y && apt-get install php7.3-mysql -y && apt-get install libapache2-mod-php7.3 -y
+
+      #Installation of mysql
+       apt-get install mysql-server -y
+
+   fi
+
+   #Restart Daemons
+   systemctl restart apache2
+   systemctl restart mysql
 
    #Move SafePanda to web-root, Change PErmission, Remove installer and Show ip
    mv ../SafePanda* /var/www/html/SafePanda
@@ -40,11 +54,8 @@ if [ "$decision" = "y" ]; then
    rm /var/www/html/SafePanda/installer.sh
    echo '';
 
-   #Installation and configuration of mysql
-   apt-get install mysql-server -y
-   mysql < "CREATE USER 'panda'@'localhost' IDENTIFIED BY 'qss-s3E-IH9_Khz'";
+   #Configuration of mysql
    mysql < database.sql;
-   mysql < "GRANT ALL PRIVILEGES ON safepanda.* TO 'panda'@'localhost'";
 
 fi
 
@@ -66,4 +77,4 @@ sleep 3;
 #Clean terminal
 clear;
 
-echo -e '\033[0;31m Open your browser and go to ' $(hostname -I)'/SafePanda/index.php';
+echo -e '\033[0;31m Open your browser and go to ' $(hostname -I)'/SafePanda';
