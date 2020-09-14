@@ -77,7 +77,7 @@
 
 
    //<!-- Counter - Alerts -->
-   if(!preg_match("/version 1.0/", $version))
+   if(!preg_match("/version 1.1/", $version))
       echo '<span class="badge badge-danger badge-counter">1+</span>';
 
    echo '</a>';
@@ -87,7 +87,7 @@
    echo '<h6 class="dropdown-header">Centro notifiche</h6>';
    echo '<a class="dropdown-item d-flex align-items-center" href="#">';
    echo '<div class="mr-3">';
-   if(!preg_match("/version 1.0/", $version)){
+   if(!preg_match("/version 1.1/", $version)){
       echo '<div class="icon-circle bg-primary">';
       echo '<i class="fas fa-exclamation text-white"></i>';
       echo '</div>';
@@ -123,6 +123,9 @@
    echo '</a>';
    echo '<a class="dropdown-item" href="guide.php">';
    echo '<i class="fas fa-book fa-sm fa-fw mr-2 text-gray-400"></i>Guida';
+   echo '</a>';
+   echo '<a class="dropdown-item" href="settings.php">';
+   echo '<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>Impostazioni';
    echo '</a>';
    echo '<div class="dropdown-divider"></div>';
    echo '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">';

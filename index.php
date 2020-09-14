@@ -30,7 +30,7 @@
           }
 
          //mysql query
-         $str = "INSERT INTO user(Username, Passwd, Question, Answer, ProfileImg, Timeout) VALUES('$username','$password','$question','$answer','$img'. '5');";
+         $str = "INSERT INTO user(Username, Passwd, Question, Answer, ProfileImg, Timeout) VALUES('$username','$password','$question','$answer','$img', 5);";
          $query = $con->prepare($str);
          $query->execute();
          mysqli_close($connection);
