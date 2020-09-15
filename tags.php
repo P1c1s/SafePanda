@@ -152,7 +152,7 @@
    include 'components/head.php';
 ?>
 
- <title>Dashboard</title>
+ <title>Etichette</title>
 
 </head>
 
@@ -181,29 +181,53 @@
 
 
 
-
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-
-<div class="dropdown no-arrow mb-4">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Opzioni
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#new">Aggiungi</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
-
-
-
-<!--            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a> -->
+            <h1 class="h3 mb-0 text-gray-800">Etichette</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a>
           </div>
+
+
+      <!-- START CATEGORIES -->
+        <div class="row">
+
+          <div class="col-md col-md-2 mb-2">
+
+            <a href="javascript:all(23);" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Tutte</a>
+
+</div>
+<?php
+
+   try{
+       // connect to mysql
+       $con = new PDO($dsn,$dbUser,$dbPassword);
+       $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   }catch (Exception $ex) {
+      echo 'Not Connected '.$ex->getMessage();
+      }
+
+   // mysql select query
+   $query = $con->prepare('SELECT Tag FROM accounts GROUP BY Tag;');
+   $query->execute();
+   $result = $query->fetchAll();
+   mysqli_close($connection);
+
+   foreach($result as $row){
+
+      echo '<div class="col-md col-md-2 mb-2">';
+      echo '<a href="javascript:f(23,`'.$row['Tag'].'`);" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> '.$row['Tag'].'</a>';
+      echo '</div>';
+
+   }
+
+
+?>
+
+          </div>
+      <!-- END CATEGORIES -->
 
           <!-- Content Row -->
           <div class="row">
@@ -237,6 +261,7 @@
       echo '<div class="col mr-2">';
       echo '<div id="titleCard'.$c.'" class="h3 font-weight-bold text-'.$row['Color'].' text-uppercase mb-1">'.$row['Title'].'</div>';
       echo '<div class="h5 mb-0 font-weight-bold text-gray-800">'.decry($row['Username'], $row['KeyC']).'</div>';
+      echo '<input id="tagCard'.$c.'" type="hidden" value="'.$row['Tag'].'">';
       echo '</div>';
       echo '<div class="col-auto">';
 
@@ -267,12 +292,6 @@
 
         </div>
         <!-- /.container-fluid -->
-
-<?php
-
-   echo '<p class="text-center">'.$c.' Accounts</p>';
-
-?>
 
       </div>
       <!-- End of Main Content -->
@@ -350,10 +369,6 @@
       echo '<div class="form-group" style="display:none;" id="urlRow'.$row['id_account'].'">';
       echo '<label class="text-'.$row['Color'].'">URL</label>';
       echo '<h5 class="form-controld dform-control-user" id="url'.$row['id_account'].'">'.printValue($row['Url']).'</h5>';
-      echo '</div>';
-      echo '<div class="form-group" style="display:none;" id="tagRow'.$row['id_account'].'">';
-      echo '<label class="text-'.$row['Color'].'">Etichetta</label>';
-      echo '<h5 class="form-controld dform-control-user" id="tag'.$row['id_account'].'">'.printValue($row['Tag']).'</h5>';
       echo '</div>';
       echo '<div class="form-group" style="display:none;" id="tagRow'.$row['id_account'].'">';
       echo '<label class="text-'.$row['Color'].'">Etichetta</label>';

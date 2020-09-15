@@ -23,11 +23,11 @@
    echo '<i class="fas fa-fw fa-star"></i>';
    echo '<span>Preferiti</span></a>';
    echo '</li>';
-   //<!-- Nav Item - Categoories -->
+   //<!-- Nav Item - Tags -->
    echo '<li class="nav-item active">';
-   echo '<a class="nav-link" href="categories.php">';
+   echo '<a class="nav-link" href="tags.php">';
    echo '<i class="fas fa-fw fa-tag"></i>';
-   echo '<span>Categorie</span></a>';
+   echo '<span>Etichette</span></a>';
    echo '</li>';
    //<!-- Nav Item - Trash -->
    echo '<li class="nav-item active">';

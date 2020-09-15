@@ -491,7 +491,7 @@
                 <div class="card-body">
                  <div class="row">
                   <div class="col-lg-11">
-                  Scegli con molta attenzione la password con la quale accedere al tuo portachiavi personale. Mi raccomando usa una password molto sicura e difficile da individuare dai malintenzonati!!!
+                    Se vuoi puoi importare i tuoi accounts con estrema facilità caricando il file CSV.
                  </div>
                  <div class="col-lg-1">
                   <div class="text-align"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import">Apri</button></div>
@@ -509,7 +509,7 @@
                 <div class="card-body">
                  <div class="row">
                   <div class="col-lg-11">
-                   Scegli la domanda di sicurezza che ti verrà chiesta in caso di password smarrita affinchè tu possa generarne una nuova.
+                   Se vuoi puoi esportare i tuoi accounts con estrema facilità i un file CSV.
                  </div>
                  <div class="col-lg-1">
                   <div class="text-align"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#export">Apri</button></div>
@@ -602,27 +602,27 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Inserisci la nuova password</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Importa accounts</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
        <form action="" method="POST" enctype="multipart/form-data">
         <div class="modal-body">
+         <div class="form-group">
           <select name="importSelection" class="form-control form-control-user">
            <option value="0" selected disabled hidden>Seleziona il tipo di file</option>
            <option value="accounts">Accounts</option>
            <option value="contacts">Contatti</option>
            <option value="notes">Note</option>
           </select>
-
+         </div>
+         <div class="form-group">
           <div class="custom-file">
            <input type="file" class="custom-file-input" id="customFile" name="file">
            <label class="custom-file-label" for="customFile">Seleziona immagine profilo</label>
           </div>
-
-          <label class="text-primary">Password</label>
-          <input type="text" name="password" class="form-control form-control-user">
+         </div>
        </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annulla</button>
@@ -651,8 +651,6 @@
            <option value="encrypted">File criptato</option>
            <option value="zip">File zip</option>
           </select>
-          <label class="text-primary">Domanda</label>
-          <input type="text" name="question" class="form-control form-control-user">
        </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Annulla</button>
