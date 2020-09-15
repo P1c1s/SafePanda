@@ -21,7 +21,7 @@ read -p "Do you want update me? YES [y] NO [n]: " decision
 if [ "$decision" = "y" ]; then
 
    #Updating
-   git pull orgin master
+   git pull
 
 fi
 

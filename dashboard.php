@@ -188,7 +188,30 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a>
+
+
+<div class="dropdown no-arrow mb-4 show">
+
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+
+                      Dropdown (no arrow)
+
+                    </button>
+
+                    <div class="dropdown-menu show" aria-labelledby="dropdownMenuButton" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -105px, 0px);" x-placement="top-start">
+
+                      <a class="dropdown-item" href="#">Action</a>
+
+                      <a class="dropdown-item" href="#">Another action</a>
+
+                      <a class="dropdown-item" href="#">Something else here</a>
+
+                    </div>
+
+                  </div>
+
+
+<!--            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a> -->
           </div>
 
           <!-- Content Row -->
@@ -253,6 +276,12 @@
 
         </div>
         <!-- /.container-fluid -->
+
+<?php
+
+   echo '<p class="text-center">'.$c.' Accounts</p>';
+
+?>
 
       </div>
       <!-- End of Main Content -->
@@ -330,6 +359,10 @@
       echo '<div class="form-group" style="display:none;" id="urlRow'.$row['id_account'].'">';
       echo '<label class="text-'.$row['Color'].'">URL</label>';
       echo '<h5 class="form-controld dform-control-user" id="url'.$row['id_account'].'">'.printValue($row['Url']).'</h5>';
+      echo '</div>';
+      echo '<div class="form-group" style="display:none;" id="tagRow'.$row['id_account'].'">';
+      echo '<label class="text-'.$row['Color'].'">Etichetta</label>';
+      echo '<h5 class="form-controld dform-control-user" id="tag'.$row['id_account'].'">'.printValue($row['Tag']).'</h5>';
       echo '</div>';
       echo '<div class="form-group" style="display:none;" id="tagRow'.$row['id_account'].'">';
       echo '<label class="text-'.$row['Color'].'">Etichetta</label>';

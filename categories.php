@@ -152,7 +152,7 @@
    include 'components/head.php';
 ?>
 
- <title>Dashboard</title>
+ <title>Etichette</title>
 
 </head>
 
@@ -181,22 +181,24 @@
 
 
 
-
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 class="h3 mb-0 text-gray-800">Etichette</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Aggiungi</a>
           </div>
 
 
-          <!-- CATEGORIES -->
-          <div class="col-xl-3 col-md-6 mb-4">
+      <!-- START CATEGORIES -->
+        <div class="row">
 
-            <a href="javascript:f(25);" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i> Tutte</a>
+          <div class="col-md col-md-2 mb-2">
 
+            <a href="javascript:all(23);" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Tutte</a>
+
+</div>
 <?php
 
    try{
@@ -215,8 +217,9 @@
 
    foreach($result as $row){
 
-      echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#new"><i class="fas fa-plus fa-sm text-white-50"></i>'.$row['Tag'].'</a>';
-
+      echo '<div class="col-md col-md-2 mb-2">';
+      echo '<a href="javascript:f(23,`'.$row['Tag'].'`);" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> '.$row['Tag'].'</a>';
+      echo '</div>';
 
    }
 
@@ -224,6 +227,7 @@
 ?>
 
           </div>
+      <!-- END CATEGORIES -->
 
           <!-- Content Row -->
           <div class="row">
@@ -257,6 +261,7 @@
       echo '<div class="col mr-2">';
       echo '<div id="titleCard'.$c.'" class="h3 font-weight-bold text-'.$row['Color'].' text-uppercase mb-1">'.$row['Title'].'</div>';
       echo '<div class="h5 mb-0 font-weight-bold text-gray-800">'.decry($row['Username'], $row['KeyC']).'</div>';
+      echo '<input id="tagCard'.$c.'" type="hidden" value="'.$row['Tag'].'">';
       echo '</div>';
       echo '<div class="col-auto">';
 
