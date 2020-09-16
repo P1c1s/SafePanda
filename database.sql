@@ -39,6 +39,7 @@ CREATE TABLE user(
    id_user INT NOT NULL AUTO_INCREMENT,
    Username VARCHAR(100),
    Passwd VARCHAR(100),
+   Pin TEXT(40),
    Question VARCHAR(100),
    Answer VARCHAR(100),
    ProfileImg VARCHAR(100),

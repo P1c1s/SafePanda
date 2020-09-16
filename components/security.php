@@ -11,10 +11,10 @@
          header("Location: login.php");
 
 
-   //
- /*  if(isset($_SESSION['login']) && ($_SESSION['timeout']+1*60) < time())
+   //Timeout
+   if(isset($_SESSION['login']) && ($_SESSION['timeout']+$_SESSION['countDown']*60) < time())
       header('Location: lockscreen.php');
-*/
+
    //Logout
    if(isset($_POST['logout'])){
       session_destroy();

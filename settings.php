@@ -1,30 +1,10 @@
 <?php
-
-   //Session
-   session_start();
-
-   if(!isset($_SESSION['login']))
-      header("Location: login.php");
-
-   //Logout
-   if(isset($_POST['logout'])){
-      session_start();
-      session_destroy();
-      header('Location: login.php');
-      if(isset($_COOKIE['login']))
-         setcookie("login", "", time() - 3600);
-      header('Location: login.php');
-   }
-
+   include 'components/security.php';
+   include 'account/variables.php';
+   include 'components/cripty.php';
 ?>
 
-
 <?php
-
-   include 'account/variables.php';
-   include 'components/redirect.php';
-   include 'components/cripty.php';
-
 
    //Date
    setlocale(LC_TIME, 'ita', 'it_IT.utf8');

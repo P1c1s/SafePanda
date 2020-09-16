@@ -1,10 +1,5 @@
 <?php
-
    include 'components/security.php';
-
-?>
-
-<?php
    include 'account/variables.php';
    include 'components/cripty.php';
 ?>

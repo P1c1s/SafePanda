@@ -1,10 +1,5 @@
 <?php
-
    include 'components/security.php';
-
-?>
-
-<?php
    include 'account/variables.php';
    include 'components/cripty.php';
 ?>
@@ -416,7 +411,7 @@
               <label class="text-primary">Password</label>
               <div class="row">
                 <div class="col-md">
-                 <input id="password0" name="password" class="form-control form-control-user"></div>
+                 <input id="password0" name="password" class="form-control form-control-user" required="required"></div>
                   <div class="col-auto">
                     <a href="javascript:passwordGenerator(0)">
                      <i id="passGen0" class="fas fa-pen fa-2x text-gray-300"></i>
