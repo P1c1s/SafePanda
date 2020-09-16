@@ -30,6 +30,7 @@
    setlocale(LC_TIME, 'ita', 'it_IT.utf8');
    $time=time();
    $date = strftime("%Y%m%d%H%M%S",$time);
+   $dateFile = strftime("%Y-%m-%d",$time);
 
    // IMPORT
    if(isset($_POST['import'])){
@@ -41,7 +42,7 @@
 
             $uploaddir = 'tmp/';
             $userfile_tmp = $_FILES['file']['tmp_name'];
-            $userfile_name = 'file.csv';
+            $userfile_name = 'fileImported.csv';
 
             if(move_uploaded_file($userfile_tmp, $uploaddir . $userfile_name)){
                echo 'File sended';
@@ -55,7 +56,7 @@
 
 
          //Open the file.
-         $fileHandle = fopen("tmp/file.csv", "r");
+         $fileHandle = fopen("tmp/fileImported.csv", "r");
 
          //Read the colums names
          $row = fgetcsv($fileHandle, 0, ",");
@@ -169,8 +170,6 @@
          $strLong .= $str;
       }
 
-         exec('rm tmp/file.csv');
-
          try{
              //connect to mysql
              $con = new PDO($dsn,$dbUser,$dbPassword);
@@ -188,13 +187,14 @@
 
 
 
-      exec('rm tmp/file.csv');
+      exec('rm tmp/fileImported.csv');
 
    }
 
 
 
    /* EXPORT */
+
 
    if($_POST['exportSelection'] == "encrypted"){
 
@@ -216,7 +216,7 @@
       mysqli_close($connection);
 
 
-      $fileName = 'tmp/passowrd'.$date.'.xls';
+      $fileName = 'tmp/passowrd'.$dateFile.'.xls';
       $fp = fopen($fileName, "w") or die("Unable to open file!");
 
       fwrite($fp, '<table border="1">');
@@ -257,6 +257,8 @@
 
    }
 
+
+
   if($_POST['exportSelection'] == "decrypted"){
 
       try{
@@ -277,7 +279,7 @@
       mysqli_close($connection);
 
 
-      $fileName = 'tmp/passowrd'.$date.'.csv';
+      $fileName = 'tmp/passowrd'.$dateFile.'.csv';
       $fp = fopen($fileName, "w") or die("Unable to open file!");
 
       fwrite($fp, 'Name,');
@@ -325,9 +327,63 @@
 
    }
 
+
+   if($_POST['exportSelection'] == "browser"){
+
+      try{
+          // connect to mysql
+          $con = new PDO($dsn,$dbUser,$dbPassword);
+          $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      }catch (Exception $ex) {
+         echo 'Not Connected '.$ex->getMessage();
+         }
+
+      // mysql select query
+      $str="SELECT * FROM accounts ORDER BY Title;";
+
+      $query = $con->prepare($str);
+      $query->execute();
+      $result = $query->fetchAll();
+
+      mysqli_close($connection);
+
+
+      $fileName = 'tmp/browser'.$dateFile.'.csv';
+      $fp = fopen($fileName, "w") or die("Unable to open file!");
+
+      fwrite($fp, 'name,');
+      fwrite($fp, 'url,');
+      fwrite($fp, 'username,');
+      fwrite($fp, 'password'."\n");
+
+        foreach ($result as $row){
+
+           fwrite($fp, $row['Title'].',');
+           fwrite($fp, $row['Url'].',');
+           fwrite($fp, decry($row['Username'], $row['KeyC']).',');
+           fwrite($fp, decry($row['Passwd'], $row['KeyC'])."\n");
+
+        }
+
+        fclose($fp);
+
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename='.basename($fileName));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($fileName));
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+        readfile($fileName);
+
+        exec('rm '.$fileName);
+
+   }
+
+
    if(isset($_POST['mysqldump'])){
 
-      $fileName = 'tmp/backup'.$date.'.sql';
+      $fileName = 'tmp/backup'.$dateFile.'.sql';
 
       exec('mysqldump --user='.$dbUser.' --password='.$dbPassword.' '.$db.' > '.$fileName);
 
@@ -354,7 +410,7 @@
          }
 
       // mysql select query
-      $str="SELECT * FROM accounts;";
+      $str="SELECT * FROM accounts ORDER BY Title;";
 
       $query = $con->prepare($str);
       $query->execute();
@@ -363,8 +419,8 @@
       mysqli_close($connection);
 
       $passwordZip = '123';
-      $fileZip = 'tmp/archive'.$date.'.zip';
-      $fileName = 'tmp/passowrd'.$date.'.xls';
+      $fileZip = 'tmp/archive'.$dateFile.'.zip';
+      $fileName = 'tmp/passowrd'.$dateFile.'.xls';
       $fp = fopen($fileName, "w") or die("Unable to open file!");
 
       fwrite($fp, '<table border="1">');
@@ -647,6 +703,7 @@
         <div class="modal-body">
           <select class="form-control form-control-user" name="exportSelection">
            <option value="0" selected disabled hidden>Seleziona il tipo di file</option>
+           <option value="browser">File per browser</option>
            <option value="decrypted">File non criptato</option>
            <option value="encrypted">File criptato</option>
            <option value="zip">File zip</option>

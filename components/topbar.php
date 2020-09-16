@@ -77,7 +77,7 @@
 
 
    //<!-- Counter - Alerts -->
-   if(!preg_match("/version 1.1/", $version))
+   if(!preg_match("/version 1.2/", $version))
       echo '<span class="badge badge-danger badge-counter">1+</span>';
 
    echo '</a>';
@@ -87,7 +87,7 @@
    echo '<h6 class="dropdown-header">Centro notifiche</h6>';
    echo '<a class="dropdown-item d-flex align-items-center" href="#">';
    echo '<div class="mr-3">';
-   if(!preg_match("/version 1.1/", $version)){
+   if(!preg_match("/version 1.2/", $version)){
       echo '<div class="icon-circle bg-primary">';
       echo '<i class="fas fa-exclamation text-white"></i>';
       echo '</div>';
@@ -95,9 +95,9 @@
    echo '</div>';
    echo '<div>';
 
-   if(!preg_match("/version 1.0/", $version)){
+   if(!preg_match("/version 1.2/", $version)){
       //echo '<div class="small text-gray-500">December 12, 2019</div>';
-      echo '<span class="font-weight-bold">È disponibile una nuova versione</span>';
+      echo '<span class="font-weight-bold">È disponibile una nuova versione. Esegui l′updater.</span>';
       echo '</div>';
    }
 
@@ -113,8 +113,13 @@
    echo '<li class="nav-item dropdown no-arrow">';
    echo '<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
    echo '<span class="mr-2 d-none d-lg-inline text-gray-600 small">'.$result['Username'].'</span>';
-   echo '<img class="img-profile rounded-circle" src="'.$result['ProfileImg'].'">';
+   if(file_exists($result['ProfileImg']))
+      echo '<img class="img-profile rounded-circle" src="'.$result['ProfileImg'].'">';
+   else
+      echo '<i class="btn btn-primary btn-circle btn-lg" style="text-transform: capitalize;">'.substr($result['Username'], 0, 2).'</i>';
    echo '</a>';
+
+
 
    //<!-- Dropdown - User Information -->
    echo '<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">';

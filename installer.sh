@@ -35,7 +35,7 @@ if [ "$decision" = "y" ]; then
       apt-get install zip -y
 
       #Installation of Apache2
-      apt-get install apache2 -y && apt-get install php7.3 -y && apt-get install php7.3-zip -y && apt-get install php7.3-mysql -y && apt-get install libapache2-mod-php7.3 -y
+      apt-get install apache2 -y && apt-get install php7.3 -y && apt-get install php7.3-zip -y && apt-get install php7.3-mysql -y && apt-get install php7.3-curl -y && apt-get install libapache2-mod-php7.3 -y
 
       #Installation of mysql
        apt-get install mysql-server -y
